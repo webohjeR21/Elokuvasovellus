@@ -200,7 +200,8 @@ CREATE TABLE public.ryhmat (
     rnimi character varying(15) NOT NULL,
     omistaja character varying(15),
     jasenet character varying(15)[],
-    create_time date
+    create_time date,
+    kuvaus text
 );
 
 
@@ -222,10 +223,10 @@ IsoKALERVO	2024-03-21	\\x294cfb471a24649bb8691f83d32838830ed5a43e3da010552a23555
 -- Data for Name: ryhmat; Type: TABLE DATA; Schema: public; Owner: leffa_user
 --
 
-COPY public.ryhmat (rnimi, omistaja, jasenet, create_time) FROM stdin;
-Kovikset	Janne42	{Liisamaikkula,tarmosami,IsoKALERVO}	2024-03-21
-Supopeatsamit	Janne42	{Liisamaikkula,tarmosami,IsoKALERVO}	2024-03-21
-Leffapojat	Liisamaikkula	{tarmosami,IsoKALERVO}	2024-03-21
+COPY public.ryhmat (rnimi, omistaja, jasenet, create_time, kuvaus) FROM stdin;
+Supopeatsamit	Janne42	{Liisamaikkula,tarmosami,IsoKALERVO}	2024-03-21	\N
+Leffapojat	Liisamaikkula	{tarmosami,IsoKALERVO}	2024-03-21	\N
+Kovikset	Janne42	{Liisamaikkula,tarmosami,IsoKALERVO}	2024-03-21	Hiton kovia jatkia vain
 \.
 
 
