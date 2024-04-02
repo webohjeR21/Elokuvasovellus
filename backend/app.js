@@ -12,6 +12,9 @@ app.listen(PORT, async function () {
   console.log('kuuntelee porttia ' + PORT);
 })
 
+
+
+
 //esimerkki
 /*
 var query = 'SELECT * FROM asiakkaat;';
