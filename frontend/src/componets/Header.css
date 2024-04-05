@@ -1,5 +1,5 @@
 header{
-    /*background-color: var(--dark-color); */
+    
     background-color: #060b26;
     height: 100px;
     display: flex;
@@ -10,6 +10,5 @@ header{
 
 
 header h1 {
-   /* color: var(--light-color);*/
    color: white;
 }
