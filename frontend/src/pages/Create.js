@@ -12,7 +12,7 @@ export default function Create() {
     Axios.post('http://localhost:3001/register', {
       username: usernameReg,
       password: passwordReg,
-      email: emailReg
+      email: emailReg,
     }).then((response) => {
       console.log(response)
     })
