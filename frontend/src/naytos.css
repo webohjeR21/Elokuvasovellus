@@ -1,9 +1,4 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f0f0;
-  }
-  
-  h1 {
+ h1 {
     color: #333;
   }
   
@@ -12,9 +7,9 @@ body {
     margin: 10px;
     padding: 10px;
     box-sizing: border-box;
-    background-color: wheat;
+    background-color: #060b26;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7); 
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.7); 
   }
   
   .show-card img {
@@ -30,10 +25,14 @@ body {
     margin-top: 0;
     font-size: 20px;
   }
+
+  .show-details h2 a {
+    color: white;
+  }
   
   .show-details div {
     margin-bottom: 5px;
-    color: #666;
+    color: white;
     font-size: 14px; 
   }
   
