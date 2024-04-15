@@ -7,7 +7,7 @@ import * as IoIcons from "react-icons/io"
 import {IconContext, icontContext} from 'react-icons'
  
 
-export default function Navbar() {
+ function Navbar() {
     const [sidebar, setSidebar] = useState(false)
 
     const showSidebarMenu = () => setSidebar(!sidebar)
@@ -45,3 +45,4 @@ export default function Navbar() {
         </>
     )
 }
+export default Navbar
