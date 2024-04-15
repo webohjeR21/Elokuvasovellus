@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './naytos.css';
 const XMLParser = require('react-xml-parser');
 
 function ShowSchedule() {
@@ -9,34 +10,46 @@ function ShowSchedule() {
     getXml();
   }, []);
 
+  //noutaa xml datan
   async function getXml() {
     try {
-      const result = await axios.get('https://www.finnkino.fi/xml/Schedule?area=1018');
+      const result = await axios.get('https://www.finnkino.fi/xml/Schedule?area=1018&nrOfDays=3');
       const parsedData = new XMLParser().parseFromString(result.data);
-
+      console.log(parsedData);
       const showsArray = parsedData.getElementsByTagName('Show');
-      const nextShows = showsArray.slice(0, 10).map(show => {
-        const id = show.getElementsByTagName('ID')[0].value;
-        const title = show.getElementsByTagName('Title')[0].value;
+      const currentTime = new Date();
+  
+      const nextShows = showsArray.map(show => {
         const startTimeStr = show.getElementsByTagName('dttmShowStart')[0].value;
-        const endTimeStr = show.getElementsByTagName('dttmShowEnd')[0].value;
         const startTime = new Date(startTimeStr);
-        const endTime = new Date(endTimeStr);
-        const theater = show.getElementsByTagName('Theatre')[0].value;
-        const auditorium = show.getElementsByTagName('TheatreAuditorium')[0].value;
-        const imageUrl = show.getElementsByTagName('Images')[0].getElementsByTagName('EventMediumImagePortrait')[0].value;
 
-        return {
-          id,
-          title,
-          startTime,
-          endTime,
-          theater,
-          auditorium,
-          imageUrl
-        };
-      });
-
+        //sijoittaa tiedot vakioihin jos ne eivät ole vielä alkaneet
+        if (startTime > currentTime) {
+          const id = show.getElementsByTagName('ID')[0].value;
+          const title = show.getElementsByTagName('Title')[0].value;
+          const endTimeStr = show.getElementsByTagName('dttmShowEnd')[0].value;
+          const endTime = new Date(endTimeStr);
+          const theater = show.getElementsByTagName('Theatre')[0].value;
+          const auditorium = show.getElementsByTagName('TheatreAuditorium')[0].value;
+          const imageUrl = show.getElementsByTagName('Images')[0].getElementsByTagName('EventMediumImagePortrait')[0].value;
+          const showUrl = show.getElementsByTagName('ShowURL')[0].value;
+          const eventUrl = show.getElementsByTagName('EventURL')[0].value;
+  
+          return {
+            id,
+            title,
+            startTime,
+            endTime,
+            theater,
+            auditorium,
+            imageUrl,
+            showUrl,
+            eventUrl,
+          };
+        }
+        return null;
+      }).filter(Boolean);
+  
       setShows(nextShows);
     } catch (error) {
       console.log(error);
@@ -45,7 +58,7 @@ function ShowSchedule() {
 
   function formatDate(date) {
     const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
 
     return `${day}.${month}.${year}`;
@@ -66,21 +79,22 @@ function ShowSchedule() {
   }
 
   return (
-    <div>
-      <h1>10 näytöstä oulussa</h1>
-      <ul>
-        {shows.map(show => (
-          <li key={show.id}>
-            <div>Title: {show.title}</div>
-            <div>Date: {formatDate(show.startTime)}</div>
-            <div>Time: {formatTime(show.startTime)}</div>
-            <div>Runtime: {getRuntime(show.startTime, show.endTime)}</div>
-            <div>Theater: {show.theater}</div>
-            <div>Auditorium: {show.auditorium}</div>
-            <img src={show.imageUrl} alt={show.title} style={{ maxWidth: '200px', maxHeight: '200px' }} />
-          </li>
-        ))}
-      </ul>
+    <div style={{display: 'flex', flexWrap: 'wrap' }}>
+      {shows.map(show => (
+        <div key={show.id} className="show-card">
+          <a href={show.eventUrl} target="_blank" rel="noopener noreferrer">
+            <img src={show.imageUrl} alt={show.title} />
+          </a>
+          <div className="show-details">
+            <div><h2><a href={show.showUrl} target="_blank" rel="noopener noreferrer">{show.title}</a></h2></div>
+            <div>Pvm: {formatDate(show.startTime)}</div>
+            <div>Klo: {formatTime(show.startTime)}</div>
+            <div>Kesto: {getRuntime(show.startTime, show.endTime)}</div>
+            <div>Teatteri: {show.theater}</div>
+            <div>Auditorio: {show.auditorium}</div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
