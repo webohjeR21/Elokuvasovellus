@@ -73,17 +73,6 @@ app.post('/register', async (req, res) => {
     }
     
   })
-  /*  bcrypt.hash(password, saltRounds, (err, hash) => {
-
-      if (err) {
-        console.log (err)
-      }
-
-      const pwhash = await client.query("INSERT INTO asiakkaat(uname, passwd, email) VALUES ($1, $2, $3)", [username, hash, email])
-      console.log(err)
-    }) */
-
-    // Uuden käyttäjän luonti
 
 app.listen(PORT, async function () {
   console.log('kuuntelee porttia ' + PORT);

@@ -9,6 +9,8 @@ import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import ShowTime from './pages/ShowTime'
 import Search from './pages/Search'
+import Login from './pages/Login'
+
 
 
 function App() {
@@ -23,7 +25,8 @@ function App() {
         <Route path='*' element={<NotFound />} />
         <Route path='/Showtime' element={<ShowTime />} />
         <Route path='/Search' element={<Search />} />
-
+        <Route path='/LoginPage' element={<Login />} />
+        
          </Routes>
     </div>
     <Footer></Footer>

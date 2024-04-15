@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import Axios from 'axios'
 import './Create.css'
+import { useNavigate } from 'react-router-dom'
+
 
 export default function Create() {
 
@@ -8,6 +10,8 @@ export default function Create() {
   const [passwordReg, setPasswordReg] = useState('')
   const [emailReg, setEmailReg] = useState('')
 
+  const navigate = useNavigate()
+ 
   const register = () => {
    
     Axios.post('http://localhost:3001/register', {
@@ -25,6 +29,9 @@ export default function Create() {
     })
   }
 
+  const loginPage = () => {
+    navigate.push('/login')
+  }
 
   return (
     <div className='App'>
@@ -40,6 +47,12 @@ export default function Create() {
        <input type="password" onChange={(e) => setPasswordReg(e.target.value)} />
        
        <button onClick={register}>Luo käyttäjä</button>
+
+       <div className='logiiin'>
+          <button onClick={() => {
+            navigate("/LoginPage")
+          }}>Kirjaudu sisään</button>
+      </div>
       </div>
     </div>
   )
