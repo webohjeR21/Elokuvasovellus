@@ -1,0 +1,38 @@
+ h1 {
+    color: #333;
+  }
+  
+  .show-card {
+    width: calc(20% - 20px);
+    margin: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #060b26;
+    border-radius: 8px;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.7); 
+  }
+  
+  .show-card img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .show-details {
+    padding: 10px;
+  }
+  
+  .show-details h2 {
+    margin-top: 0;
+    font-size: 20px;
+  }
+
+  .show-details h2 a {
+    color: white;
+  }
+  
+  .show-details div {
+    margin-bottom: 5px;
+    color: white;
+    font-size: 14px; 
+  }
+  
