@@ -1,0 +1,87 @@
+.container {
+    padding: 20px;
+  }
+  
+  .search-bar {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  
+  
+  .search-input {
+    padding: 15px;
+    width: 400px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  .search-button {
+    padding: 15px 25px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .search-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .movie-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Start listing from the left */
+  }
+  
+  .movie-card {
+    width: calc(20% - 20px);
+    margin: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #060b26;
+    margin-bottom: 75px;
+    border-radius: 8px;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.7);
+  }
+  
+  .movie-card img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .movie-details {
+    padding: 10px;
+  }
+  
+  .movie-details h2 {
+    margin-top: 0;
+    font-size: 20px;
+  }
+  
+  .movie-details h2 a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .movie-details div {
+    margin-bottom: 5px;
+    color: white;
+    font-size: 14px;
+  }
+  
+  .page-buttons {
+    padding: 15px;
+    width: 400px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  .nappula-slot {
+    padding: 5px;
+    margin-left: 3px;
+  }

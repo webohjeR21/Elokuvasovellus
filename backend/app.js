@@ -1,5 +1,6 @@
 const { fetchData } = require('./postgre');
 const express = require('express');
+const axios = require('axios');
 //const auth = require('.auth/')
 const app = express();
 app.use(express.static('public'));
@@ -13,6 +14,8 @@ app.use(express.json())
 const { Client } = require('pg');
 const bcrypt = require('bcrypt')
 const saltRounds = 10
+const apiAvain = process.env.API_KEY;
+var apiIndex = 0;
 
 
 
@@ -74,22 +77,27 @@ app.post('/register', async (req, res) => {
     
   })
 
+
+  //Elokuvien haku
+  app.get('/haku', async (req, res) => {
+    try {
+      //parametrit
+      const { s, y, type, page } = req.query;
+      //url
+      const apiUrl = `http://www.omdbapi.com/?apikey=${apiAvain}&s=${s}&y=${y}&type=${type}&page=${page}`;
+      const response = await axios.get(apiUrl);
+      //vastaus
+      res.json(response.data);
+      console.log('suoritettiin api kutsu ', apiIndex, ' ', s, ' ', page);
+      apiIndex++;
+    } catch (error) {
+      console.error('joku meni pieleen', error);
+      res.status(1).json({ error: 'joku meni pieleen' });
+    }
+  });
+
 app.listen(PORT, async function () {
   console.log('kuuntelee porttia ' + PORT);
 })
 
-
-
-
-//esimerkki
-/*
-var query = 'SELECT * FROM asiakkaat;';
-(async () => {
-  try {
-    const result = await fetchData(query);
-    console.log(result);
-  } catch (error) {
-    console.error('Virhe: ', error);
-  }
-})(); */ 
 
