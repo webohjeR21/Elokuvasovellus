@@ -30,11 +30,13 @@ export default class Search extends Component {
 
   handleHakuNappi = async () => {
     const { hakuTermi, valittuVuosi, valittuTyyppi, sivuNumero } = this.state;
-    try {
-      const result = await ApiHaku(hakuTermi, valittuVuosi, valittuTyyppi, sivuNumero);
-      this.setState({ hakuTulos: result });
-    } catch (error) {
-      console.error('Error fetching data:', error);
+    if (hakuTermi !== ''){
+      try {
+        const result = await ApiHaku(hakuTermi, valittuVuosi, valittuTyyppi, sivuNumero);
+        this.setState({ hakuTulos: result });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     }
   };
 
@@ -84,14 +86,14 @@ export default class Search extends Component {
     return sortedTulos;
   };
 
-  renderhakuTulos = () => {
+  renderHakuTulos = () => {
     const sortedTulos = this.sortHakuTulos();
     return (
-      <div className="movie-grid">
+      <div className="leffa-grid">
         {sortedTulos.map((movie) => (
-          <div key={movie.imdbID} className="movie-card">
-            <img src={movie.Poster !== 'N/A' ? movie.Poster : 'https://via.placeholder.com/300x450'} alt={movie.Title} className="movie-poster" />
-            <div className="movie-details">
+          <div key={movie.imdbID} className="leffa-kortti">
+            <img src={movie.Poster !== 'N/A' ? movie.Poster : 'https://via.placeholder.com/300x450'} alt={movie.Title} className="leffa-juliste" />
+            <div className="leffa-tiedot">
               <h2><a href={`https://www.imdb.com/title/${movie.imdbID}`} target="_blank" rel="noopener noreferrer">{movie.Title}</a></h2>
               <div>Vuosi: {movie.Year}</div>
               <div>Tyyppi: {movie.Type}</div>
@@ -107,46 +109,48 @@ export default class Search extends Component {
     return (
       
       <div className="container">
-        <div className="page-buttons">
+        <footer className="sivun-vaihto">
             <button className='nappula-slot' onClick={this.handleEdlSivu} disabled={this.state.sivuNumero === 1}>Edllinen</button>
             <button className='nappula-slot' onClick={this.handleSeurSivu}>Seuraava</button>
             <button className='nappula-slot' onClick={async () => {await this.takaisinAlkuun(); this.handleHakuNappi();  }}>Takaisin alkuun</button>
-          </div>
-        <div className="search-bar">
+            <p className='sivu-numero'>Sivu: {this.state.sivuNumero}</p>
+        </footer>
+        <div className="haku-palkki">
           <input
             type="text"
             value={hakuTermi}
             onChange={this.handleMuutos}
             placeholder="Hae elokuvia!"
-            className="search-input"
+            className="haku-teksti"
           />
-          <div className="filter-dropdown">
-          <button onClick={async () => {await this.takaisinAlkuun(); this.handleHakuNappi();  }} className="search-button">
+          <div className="haku-nappi-div">
+          <button onClick={async () => {await this.takaisinAlkuun(); this.handleHakuNappi();  }} className="haku-nappi">
               Hae
             </button>
-          <select value={valittuVuosi} onChange={this.handleVuosi} className="filter-select">
+          </div >
+        </div>
+        <div className="valinnat">
+        <select value={valittuVuosi} onChange={this.handleVuosi} className="suodatin-valinnat">
               <option value="">Valitse Vuosi</option>
               {Array.from({ length: new Date().getFullYear() - 1900 }, (_, index) => (
                 <option key={index} value={new Date().getFullYear() - index}>{new Date().getFullYear() - index}</option>
               ))}
             </select>
-            <select value={valittuTyyppi} onChange={this.handleTyyppi} className="filter-select">
+            <select value={valittuTyyppi} onChange={this.handleTyyppi} className="suodatin-valinnat">
               <option value="">Valitse Tyyppi</option>
               <option value="movie">Movie</option>
               <option value="series">Series</option>
               <option value="episode">Episode</option>
             </select>
-            <select value={valittuSort} onChange={this.handleSort} className="filter-select">
+            <select value={valittuSort} onChange={this.handleSort} className="suodatin-valinnat">
               <option value="default">Valitse järjestys</option>
               <option value="yearAsc">Vuosi (vahnin ensin)</option>
               <option value="yearDesc">Vuosi (uusin ensin)</option>
               <option value="aakkoset">Aakkoset</option>
             </select>
-            <button onClick={this.handleSuodatinReset} className="reset-button">Nollaa Suodattimet</button>
-          </div >
-          
+            <button onClick={this.handleSuodatinReset} className="suodatin-valinnat">Nollaa Suodattimet</button>
         </div>
-        {this.renderhakuTulos()}
+        {this.renderHakuTulos()}
       </div>
     );
   }
