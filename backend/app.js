@@ -88,7 +88,7 @@ app.post('/register', async (req, res) => {
       const response = await axios.get(apiUrl);
       //vastaus
       res.json(response.data);
-      console.log('suoritettiin api kutsu ', apiIndex, ' ', s, ' ', page);
+      console.log('Suoritettiin api kutsu ', apiIndex, '. haku: ', s, ', sivu: ', page, ' vuosi: ', y, ' tyyppi: ', type, new Date );
       apiIndex++;
     } catch (error) {
       console.error('joku meni pieleen', error);
@@ -96,8 +96,8 @@ app.post('/register', async (req, res) => {
     }
   });
 
-app.listen(PORT, async function () {
-  console.log('kuuntelee porttia ' + PORT);
-})
+  app.listen(PORT, async function () {
+    console.log('kuuntelee porttia ' + PORT);
+  })
 
 

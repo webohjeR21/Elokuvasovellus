@@ -1,6 +1,13 @@
  h1 {
     color: #333;
   }
+
+  .leffa-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-bottom: 60px;
+  }
   
   .show-card {
     width: calc(20% - 20px);

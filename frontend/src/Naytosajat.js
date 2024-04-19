@@ -79,7 +79,7 @@ function ShowSchedule() {
   }
 
   return (
-    <div style={{display: 'flex', flexWrap: 'wrap' }}>
+    <div className='leffa-grid' >
       {shows.map(show => (
         <div key={show.id} className="show-card">
           <a href={show.eventUrl} target="_blank" rel="noopener noreferrer">
