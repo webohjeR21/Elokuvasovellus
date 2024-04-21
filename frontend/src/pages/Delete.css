@@ -1,0 +1,34 @@
+.delete-form {
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 40px;
+    border-radius: 10px;
+    background-color: #fff; /* Taustaväri */
+  }
+  
+  .delete-form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .delete-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+  
+  .delete-form button {
+    background-color: #007bff; /* Vaihda haluamaasi väriin */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Lisää siirtymä efekti hoverille */
+  }
+  
+  .delete-form button:hover {
+    background-color: red; /* Vaihda haluamaasi väriin */
+  }

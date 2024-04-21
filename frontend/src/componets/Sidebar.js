@@ -29,5 +29,23 @@ export const Sidebar = [
         icon: <FaIcons.FaSearch />,
         cNameT: 'nav-text'
     },
+    {
+        title: 'Elokuva-arvostelu',
+        path: '/ratemovies',
+        icon: <FaIcons.FaStar />,
+        cNameT: 'nav-text'
+    },
+    {
+        title: 'Käyttäjän poisto',
+        path: '/delete',
+        icon: <FaIcons.FaTrash />,
+        cNameT: 'nav-text'
+    },
+    {
+        title: 'Kirjautuminen',
+        path: '/login',
+        icon: <FaIcons.FaLock />,
+        cNameT: 'nav-text'
+    }
 
 ]
