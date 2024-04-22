@@ -139,14 +139,14 @@ app.post('/login', async (req, res) => {
       console.log("toimii jeejee");
     } 
 
-    if (!hashMatch){
-      console.error('salasant ei täsmää:', err.message);
-      res.status(500).json({ error: "salasanat ei täsmää" });
+    else {
+      console.log('Salasanat ei täsmää');
+      return res.status(401).json({ error: "Salasana väärin" });
     }
 
-  } catch (err) {
-      console.error('Error login:');
-      res.status(500).json({ error: "Internal Server Error" });
-    }
+  } catch (erro) {
+    console.error('Eroor: ', erro);
+    return res.status(500).json({ error: "Palvelin error" });
+  }
     
   })
