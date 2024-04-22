@@ -33,7 +33,7 @@ const Delete = () => {
       return;
     }
 
-    fetch(`http://localhost:3000/asiakkaat/${username}`, {
+    fetch(`http://localhost:3001/asiakkaat/${username}`, {
       method: 'DELETE',
       headers: {
         'Content-type': 'application/json',
