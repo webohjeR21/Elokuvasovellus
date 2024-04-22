@@ -103,29 +103,25 @@ app.post('/register', async (req, res) => {
   app.post('/login', async (req, res) => {
     const { username, password } = req.body;
   
-     console.log("Received username:", username);
-     console.log("Received password:", password);
+     console.log("Login yritys", username);
   
     if (!username) {
       return res.status(400).json({error: "Username cannot be null or empty"})
     }
   
     try {
-      // Testaa onko käyttäjä jo olemassa
+      //kokeile onko salasana ja käyttäjänimi oikein
       const result = await client.query("SELECT passwd FROM asiakkaat WHERE uname = $1", [username]);
       const hashPwd = result.rows[0].passwd;
       const hashMatch = await bcrypt.compare(password, hashPwd);
 
       if (hashMatch) {
         console.log("toimii jeejee");
-
       }
   
-
       } catch (err) {
-        console.error('Error login user:', err.message);
-      res.status(500).json({ error: "Internal Server Error" })
-        // handle error
+        console.error('Error login:', err.message);
+      res.status(500).json({ error: "Internal Server Error" });
       }
       
     })
