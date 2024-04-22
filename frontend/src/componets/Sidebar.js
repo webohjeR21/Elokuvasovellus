@@ -12,12 +12,6 @@ export const Sidebar = [
         cNameT: 'nav-text'
     },
     {
-        title: 'Luo käyttäjä',
-        path: '/create',
-        icon: <FiIcons.FiUserPlus />,
-        cNameT: 'nav-text'
-    },
-    {
         title: 'Näytösajat',
         path: '/showtime',
         icon: <IoIcons.IoIosPaper />,
@@ -37,8 +31,14 @@ export const Sidebar = [
     },
     {
         title: 'Kirjautuminen',
-        path: '/login',
+        path: '/loginpage',
         icon: <FaIcons.FaLock />,
+        cNameT: 'nav-text'
+    },
+    {
+        title: 'Luo käyttäjä',
+        path: '/create',
+        icon: <FiIcons.FiUserPlus />,
         cNameT: 'nav-text'
     }
 
