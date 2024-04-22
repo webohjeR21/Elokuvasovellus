@@ -40,11 +40,7 @@ const Delete = () => {
       },
     })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error('Virhe käyttäjän poistamisessa');
-        }
-        // Check if response status is 204 (No Content) which indicates successful deletion
-        if (response.status === 204) {
+        if (response.status === 200) {
           console.log('Käyttäjä poistettu');
           Swal.fire({
             icon: 'success',

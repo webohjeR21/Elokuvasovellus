@@ -30,12 +30,6 @@ export const Sidebar = [
         cNameT: 'nav-text'
     },
     {
-        title: 'Elokuva-arvostelu',
-        path: '/ratemovies',
-        icon: <FaIcons.FaStar />,
-        cNameT: 'nav-text'
-    },
-    {
         title: 'Käyttäjän poisto',
         path: '/delete',
         icon: <FaIcons.FaTrash />,

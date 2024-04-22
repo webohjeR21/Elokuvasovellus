@@ -11,9 +11,6 @@ import ShowTime from './pages/ShowTime'
 import Search from './pages/Search'
 import Login from './pages/Login'
 import Delete from './pages/Delete'
-import RateMovies from './pages/RateMovies'
-
-
 
 function App() {
   return (
@@ -28,7 +25,6 @@ function App() {
         <Route path='/Showtime' element={<ShowTime />} />
         <Route path='/Search' element={<Search />} />
         <Route path='/LoginPage' element={<Login />} />
-        <Route path='/RateMovies' element={<RateMovies />} />
         <Route path='/Delete' element={<Delete />} />
 
          </Routes>
