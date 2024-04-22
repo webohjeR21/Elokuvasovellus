@@ -71,6 +71,7 @@ app.post('/register', async (req, res) => {
     }
     
   })
+
   app.delete('/asiakkaat/:uname', async (req, res) => {
     const userUname = req.params.uname;
     try {
@@ -109,7 +110,27 @@ app.get('/haku', async (req, res) => {
 
   } catch (error) {
     console.error('joku meni pieleen', error);
-    res.status(1).json({ error: 'joku meni pieleen' });
+    res.status(401).json({ error: 'joku meni pieleen' });
+  }
+});
+
+//IMDB HAKU
+app.get('/imdb', async (req, res) => {
+  try {
+
+    //parametrit
+    const { i } = req.query;
+    //url
+    const apiUrl = `http://www.omdbapi.com/?apikey=${apiAvain}&i=${i}&plot=short`;
+    const response = await axios.get(apiUrl);
+    //vastaus
+    res.json(response.data);
+    console.log('Suoritettiin api kutsu ', apiIndex, '. ID: ', i, ', ', new Date );
+    apiIndex++;
+
+  } catch (error) {
+    console.error('joku meni pieleen', error);
+    res.status(401).json({ error: 'joku meni pieleen' });
   }
 });
 
@@ -157,3 +178,18 @@ app.post('/login', async (req, res) => {
   }
     
   })
+
+  //IMDB ARVOSTELU
+  app.post('/imdbsubmit', async (req, res) => {
+    const { uname, arvosana, arvostelu, imdbID } = req.body;
+    console.log(req.body); // Log the request body to check if it contains the expected data
+    try {
+      const vastaus = await client.query("INSERT INTO arvostelut(create_time, asiakas, arvosana, imdbid, arvostelu) VALUES (CURRENT_TIMESTAMP, $1, $2, $3, $4);", [uname, arvosana, imdbID, arvostelu]);
+      // Handle successful insertion
+      res.status(200).json({ success: true, message: 'Data inserted successfully' });
+    } catch (error) {
+      console.error('Error inserting data:', error.message);
+      res.status(500).json({ success: false, error: error.message }); // Respond with an error status and message
+    }
+  });
+  
