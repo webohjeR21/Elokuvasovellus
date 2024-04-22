@@ -108,6 +108,7 @@ app.post('/login', async (req, res) => {
   }
 
   try {
+    
     //kokeile onko salasana ja käyttäjänimi oikein
     const result = await client.query("SELECT passwd FROM asiakkaat WHERE uname = $1", [username]);
     const hashPwd = result.rows[0].passwd;
@@ -115,10 +116,15 @@ app.post('/login', async (req, res) => {
 
     if (hashMatch) {
       console.log("toimii jeejee");
+    } 
+
+    if (!hashMatch){
+      console.error('salasant ei täsmää:', err.message);
+      res.status(500).json({ error: "salasanat ei täsmää" });
     }
 
   } catch (err) {
-      console.error('Error login:', err.message);
+      console.error('Error login:');
       res.status(500).json({ error: "Internal Server Error" });
     }
     
