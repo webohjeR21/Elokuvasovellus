@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import ApiHaku from './ApiHaku';
+import Api from './ApiHaku';
 import './Search.css';
+import { Link } from 'react-router-dom';
 
 export default class Search extends Component {
   state = {
@@ -32,10 +33,10 @@ export default class Search extends Component {
     const { hakuTermi, valittuVuosi, valittuTyyppi, sivuNumero } = this.state;
     if (hakuTermi !== ''){
       try {
-        const result = await ApiHaku(hakuTermi, valittuVuosi, valittuTyyppi, sivuNumero);
+        const result = await Api.ApiHaku(hakuTermi, valittuVuosi, valittuTyyppi, sivuNumero);
         this.setState({ hakuTulos: result });
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('error', error);
       }
     }
   };
@@ -86,6 +87,7 @@ export default class Search extends Component {
     return sortedTulos;
   };
 
+
   renderHakuTulos = () => {
     const sortedTulos = this.sortHakuTulos();
     return (
@@ -97,6 +99,7 @@ export default class Search extends Component {
               <h2><a href={`https://www.imdb.com/title/${movie.imdbID}`} target="_blank" rel="noopener noreferrer">{movie.Title}</a></h2>
               <div>Vuosi: {movie.Year}</div>
               <div>Tyyppi: {movie.Type}</div>
+              <Link to={`/arvostelu/${movie.imdbID}`} className="arvostelu-nappi">Arvostele</Link>
             </div>
           </div>
         ))}
