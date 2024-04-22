@@ -64,7 +64,7 @@ app.post('/register', async (req, res) => {
 
 
   
-      const hash = await bcrypt.hash(password, saltRounds, password);
+      const hash = await bcrypt.hash(password, saltRounds);
 
       const result = await client.query("INSERT INTO asiakkaat(uname, passwd, email) VALUES ($1, $2, $3)", [username, hash, email])
       console.log("User registered:", username);
@@ -101,7 +101,7 @@ app.post('/register', async (req, res) => {
   })
 
   app.post('/login', async (req, res) => {
-    const { username, password, email } = req.body;
+    const { username, password } = req.body;
   
      console.log("Received username:", username);
      console.log("Received password:", password);
@@ -112,18 +112,18 @@ app.post('/register', async (req, res) => {
   
     try {
       // Testaa onko käyttäjä jo olemassa
-      const hashPwd = await bcrypt.hash(password, saltRounds, password);
-      const existingUser = await client.query("SELECT * FROM asiakkaat WHERE uname = $1 AND passwd = $2", [username, hashPwd]);
-      console.log("try", username, " ", hashPwd);
-     
-      if (existingUser.rows.length > 0) {
+      const result = await client.query("SELECT passwd FROM asiakkaat WHERE uname = $1", [username]);
+      const hashPwd = result.rows[0].passwd;
+      const hashMatch = await bcrypt.compare(password, hashPwd);
+
+      if (hashMatch) {
         console.log("toimii jeejee");
-        return res.status(200).json({ error: "Username or email already exists" });
+
       }
   
 
       } catch (err) {
-        console.error('Error registering user:', err.message);
+        console.error('Error login user:', err.message);
       res.status(500).json({ error: "Internal Server Error" })
         // handle error
       }
