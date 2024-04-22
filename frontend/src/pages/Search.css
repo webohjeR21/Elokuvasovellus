@@ -1,0 +1,108 @@
+.container {
+    padding: 5px;
+  }
+  
+  .haku-palkki {
+    display: flex;
+    margin-bottom: 5px;
+  }
+  
+  
+  .haku-teksti {
+    padding: 15px;
+    width: 500px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  .haku-nappi {
+    padding: 15px 25px;
+    border: none;
+    background-color: #ff9d00;
+    color: black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .haku-nappi:hover {
+    background-color: #ff9d00;
+  }
+  
+  .leffa-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-bottom: 60px;
+  }
+  
+  .leffa-kortti {
+    width: calc(20% - 20px);
+    margin: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #060b26;
+    margin-bottom: 40px;
+    border-radius: 8px;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.7);
+  }
+  
+  .leffa-kortti img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .leffa-tiedot {
+    padding: 10px;
+  }
+  
+  .leffa-tiedot h2 {
+    margin-top: 0;
+    font-size: 20px;
+  }
+  
+  .leffa-tiedot h2 a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .leffa-tiedot div {
+    margin-bottom: 5px;
+    color: white;
+    font-size: 14px;
+  }
+  
+  .sivun-vaihto {
+    background-color: #060b26;
+    width: 350px;
+    font-size: 16px;
+    flex-direction: row;
+    align-items: left;
+    z-index: 2;
+    
+  }
+  .sivun-vaihto p {
+    color: white;
+    margin-left: 10px;
+    
+  }
+  .nappula-slot {
+    background-color:#ff9d00;
+    color: black;
+    padding: 5px;
+    margin-left: 3px;
+  }
+
+  .sivu-numero {
+    margin-left: 3px;
+  }
+
+  .valinnat {
+    margin-bottom: 3px;
+  }
+
+  .suodatin-valinnat {
+    margin-left: 5px;
+  }
