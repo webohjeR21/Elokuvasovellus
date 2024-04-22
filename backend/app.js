@@ -142,7 +142,8 @@ app.post('/login', async (req, res) => {
     const hashMatch = await bcrypt.compare(password, hashPwd);
 
     if (hashMatch) {
-      console.log("toimii jeejee");
+      console.log("Salasanat täsmää");
+      return res.status(200).json("Oikein");
     } 
 
     else {
