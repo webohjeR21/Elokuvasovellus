@@ -71,6 +71,26 @@ app.post('/register', async (req, res) => {
     }
     
   })
+  app.delete('/asiakkaat/:uname', async (req, res) => {
+    const userUname = req.params.uname;
+    try {
+      // Check if the user exists before attempting to delete
+      const result = await client.query('SELECT * FROM asiakkaat WHERE uname = $1', [userUname]);
+      if (result.rows.length === 0) {
+        // User does not exist, return 404
+        console.log('Käyttäjää ei löytynyt: ', userUname);
+        return res.status(404).json({ error: 'Käyttäjää ei löydy.' });
+      }
+  
+      // User exists, proceed with deletion
+      await client.query('DELETE FROM asiakkaat WHERE uname = $1', [userUname]);
+      console.log('Käyttäjä poistettu: ', userUname);
+      res.status(200).json({ message: 'Käyttäjä poistettu.' });
+    } catch (error) {
+      console.error('Virhe käyttäjän poistossa:', error);
+      res.status(500).json({ error: 'Käyttäjän poistossa tapahtui virhe.' });
+    }
+  });
 
 
 //HAKU
@@ -96,6 +116,7 @@ app.get('/haku', async (req, res) => {
 app.listen(PORT, async function () {
   console.log('kuuntelee porttia ' + PORT);
 })
+
 
 //LOGIN
 app.post('/login', async (req, res) => {
