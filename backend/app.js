@@ -132,6 +132,12 @@ app.post('/login', async (req, res) => {
     
     //kokeile onko salasana ja käyttäjänimi oikein
     const result = await client.query("SELECT passwd FROM asiakkaat WHERE uname = $1", [username]);
+
+    if (result.rows.length < 1){
+      console.log('Käyttäjää ei ole olemassa');
+      return res.status(401).json({ error: "Käyttäjänimeä ei löydy" });
+    }
+
     const hashPwd = result.rows[0].passwd;
     const hashMatch = await bcrypt.compare(password, hashPwd);
 
