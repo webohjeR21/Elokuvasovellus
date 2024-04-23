@@ -20,8 +20,9 @@ export default function Login() {
     .then((response) => {
       console.log(response);
       if (response.status === 200) {
-        // Store token in localStorage
+       
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('username', response.data.user.username)
         navigate('/Authed');
       }
     })

@@ -154,14 +154,14 @@ app.post('/login', async (req, res) => {
     const hashMatch = await bcrypt.compare(password, hashPwd);
 
     if (hashMatch) {
-     // console.log("Token generated for username:", username);
+      console.log("Token generated for username:", username);
       console.log("Salasanat täsmää");
       const id = result.rows[0].id
       const token = jwt.sign({id}, "jwtSecret", {
         expiresIn: 300, 
       })
       req.session.asiakkaat = result
-      res.json({auth: true, token, result: result})
+      res.json({auth: true, token, user: {username: username}})
       
     } 
 
