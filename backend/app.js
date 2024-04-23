@@ -7,14 +7,18 @@ require('dotenv').config();
 const cors = require('cors');
 app.use(cors());
 app.use(express.json());
+const session = require('express-session');
 //app.use('/auth')
 //POSTGRES CLIENT
-
+const jwt = require('jsonwebtoken');
 const { Client } = require('pg');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const apiAvain = process.env.API_KEY;
 var apiIndex = 0;
+
+
+
 
 
 
@@ -118,6 +122,14 @@ app.listen(PORT, async function () {
 })
 
 
+app.use(session({
+  secret: 'jwtSecret', // Specify a secret string to sign the session ID cookie
+  resave: false,
+  saveUninitialized: true
+}));
+
+
+
 //LOGIN
 app.post('/login', async (req, res) => {
 
@@ -142,8 +154,15 @@ app.post('/login', async (req, res) => {
     const hashMatch = await bcrypt.compare(password, hashPwd);
 
     if (hashMatch) {
+     // console.log("Token generated for username:", username);
       console.log("Salasanat täsmää");
-      return res.status(200).json("Oikein");
+      const id = result.rows[0].id
+      const token = jwt.sign({id}, "jwtSecret", {
+        expiresIn: 300, 
+      })
+      req.session.asiakkaat = result
+      res.json({auth: true, token, result: result})
+      
     } 
 
     else {
@@ -155,5 +174,36 @@ app.post('/login', async (req, res) => {
     console.error('Eroor: ', erro);
     return res.status(500).json({ error: "Palvelin error" });
   }
-    
+  
   })
+
+  //Salasana vaihto
+
+  app.post('/password-change', async (req, res) => {
+    const { username, oldPassword, newPassword } = req.body;
+   
+    
+    try {
+      const result = await client.query("SELECT passwd FROM asiakkaat WHERE uname = $1", [username]);
+      if (result.rows.length < 1) {
+        return res.status(401).json({ error: "User not found" });
+      }
+  
+      const hashPwd = result.rows[0].passwd;
+      const hashMatch = await bcrypt.compare(oldPassword, hashPwd);
+  
+      if (!hashMatch) {
+        return res.status(401).json({ error: "Vanha salasana väärä" });
+      }
+  
+      const newHash = await bcrypt.hash(newPassword, saltRounds);
+      await client.query("UPDATE asiakkaat SET passwd = $1 WHERE uname = $2", [newHash, username]);
+  
+      return res.status(200).json({ message: "Salasann päivittäminen onnistui" });
+    } catch (error) {
+      console.error('Error changing password:', error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+
+ 
