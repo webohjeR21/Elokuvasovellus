@@ -13,6 +13,7 @@ import Login from './pages/Login'
 import Delete from './pages/Delete'
 import Authed from './pages/Authed'
 
+
 function App() {
   return (
     <>
@@ -26,9 +27,8 @@ function App() {
         <Route path='/Showtime' element={<ShowTime />} />
         <Route path='/Search' element={<Search />} />
         <Route path='/LoginPage' element={<Login />} />
-        <Route path='/Delete' element={<Delete />} />
         <Route path='/Authed' element={<Authed />} />
-
+        <Route path='/Delete' element={<Delete />} />
          </Routes>
     </div>
     <Footer></Footer>
