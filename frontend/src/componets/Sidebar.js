@@ -40,6 +40,13 @@ export const Sidebar = [
         path: '/create',
         icon: <FiIcons.FiUserPlus />,
         cNameT: 'nav-text'
+    },
+
+    {
+        title: 'Käyttäjäasetukset',
+        path: '/Welcome',
     }
+
+
 
 ]

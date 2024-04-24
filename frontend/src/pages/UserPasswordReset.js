@@ -3,7 +3,7 @@ import Axios from 'axios';
 
 export default function UserPasswordReset() {
   const [newPassword, setNewPassword] = useState('');
-  const [token, setToken] = useState('');
+  const [BearerToken, setToken] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -20,7 +20,7 @@ export default function UserPasswordReset() {
       },
       {
         headers: {
-          'x-access-token': token,
+          'Authorization':BearerToken
         },
       }
     )

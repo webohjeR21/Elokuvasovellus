@@ -180,22 +180,12 @@ app.post('/login', async (req, res) => {
   //Salasana vaihto
 
   app.post('/password-change', async (req, res) => {
-    const { username, oldPassword, newPassword } = req.body;
-   
-    
+    const { newPassword } = req.body;
+    const token = req.headers.authorization?.split(' ')[1];
+
     try {
-      const result = await client.query("SELECT passwd FROM asiakkaat WHERE uname = $1", [username]);
-      if (result.rows.length < 1) {
-        return res.status(401).json({ error: "User not found" });
-      }
-  
-      const hashPwd = result.rows[0].passwd;
-      const hashMatch = await bcrypt.compare(oldPassword, hashPwd);
-  
-      if (!hashMatch) {
-        return res.status(401).json({ error: "Vanha salasana väärä" });
-      }
-  
+     
+      const username = jwt.verify(token, process.env.JWT_SECRET).username;
       const newHash = await bcrypt.hash(newPassword, saltRounds);
       await client.query("UPDATE asiakkaat SET passwd = $1 WHERE uname = $2", [newHash, username]);
   
