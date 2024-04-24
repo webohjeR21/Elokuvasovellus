@@ -7,6 +7,7 @@ export default function UserPasswordReset() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    console.log = ("Tokeni tuli:", token)
     if (token) {
       setToken(token);
     }
