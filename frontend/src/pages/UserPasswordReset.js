@@ -1,26 +1,31 @@
+import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
-import React, { useState } from 'react';
 
-export default function UserPasswordReset({ token, username }) {
-  const [oldPassword, setOldPassword] = useState('');
+export default function UserPasswordReset() {
   const [newPassword, setNewPassword] = useState('');
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setToken(token);
+    }
+  }, []);
 
   const handleChangePassword = () => {
     Axios.post(
       'http://localhost:3001/password-change',
       {
-        username: username,
-        oldPassword: oldPassword,
         newPassword: newPassword,
       },
       {
         headers: {
-          'x-access-token': token, 
+          'x-access-token': token,
         },
       }
     )
       .then((response) => {
-        console.log(response.data);
+        console.log("Meni läpi", response.data);
       })
       .catch((error) => {
         console.error('Error changing password:', error.response.data.error);
@@ -28,14 +33,8 @@ export default function UserPasswordReset({ token, username }) {
   };
 
   return (
-    <div className='ChangePassword'>
+    <div className='passwordReset'>
       <h2>Vaihda salasana</h2>
-      <input
-        type='password'
-        placeholder='Vanha salasana'
-        value={oldPassword}
-        onChange={(e) => setOldPassword(e.target.value)}
-      />
       <input
         type='password'
         placeholder='Uusi salasana'
