@@ -1,7 +1,7 @@
 footer {
     background-color: #060b26;
     display: flex;
-    justify-content: center;
+    justify-content: right;
     align-items: center;
     height: 70px;
     width: 100%;
@@ -9,6 +9,26 @@ footer {
     bottom: 0;
 }
 
-footer p {
-    color: white;
+.logout {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.logout:hover {
+    background-color: #0056b3;
+  }
+
+.asiakas {
+    align-items: normal;
+}
+
+.asiakas p {
+    font-size: 16px;
+  color: white;
+  margin-right: 10px;
 }

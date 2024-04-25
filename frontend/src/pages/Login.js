@@ -2,6 +2,7 @@ import React, {  useState, } from 'react'
 import Axios from 'axios'
 import './Create.css'
 import { useNavigate } from 'react-router-dom'
+import Footer from '../componets/Footer'
 
 
 export default function Login() {

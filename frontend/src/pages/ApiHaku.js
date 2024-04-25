@@ -39,4 +39,22 @@ async function ApiHakuImdb(imdbID) {
   }
 }
 
-export default {ApiHaku, ApiHakuImdb};
+async function TarkistaToken(){
+  const Username = localStorage.getItem('username');
+  const BearerToken = localStorage.getItem('token');
+
+  try {
+    const response = await axios.post('http://localhost:3001/tarkista-login', { clientUsername: Username, }, { headers: { 'Authorization':BearerToken },})
+    if (response.status === 200){
+      return true;
+    } else {
+      return false;
+    }
+
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+export default {ApiHaku, ApiHakuImdb, TarkistaToken};

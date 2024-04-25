@@ -219,13 +219,39 @@ app.post('/login', async (req, res) => {
 
   //IMDB ARVOSTELU
   app.post('/imdbsubmit', async (req, res) => {
-    const { uname, arvosana, arvostelu, imdbID } = req.body;
+    const { asiakas, arvosana, arvostelu, imdbID } = req.body;
+    console.log(asiakas);
     try {
-      const vastaus = await client.query("INSERT INTO arvostelut(create_time, asiakas, arvosana, imdbid, arvostelu) VALUES (CURRENT_TIMESTAMP, $1, $2, $3, $4);", [uname, arvosana, imdbID, arvostelu]);
+      const vastaus = await client.query("INSERT INTO arvostelut(create_time, asiakas, arvosana, imdbid, arvostelu) VALUES (CURRENT_TIMESTAMP, $1, $2, $3, $4);", [asiakas, arvosana, imdbID, arvostelu]);
       res.status(200).json({ success: true, message: 'Data inserted successfully' });
     } catch (error) {
       console.error('Error inserting data:', error.message);
       res.status(500).json({ success: false, error: error.message }); 
+    }
+  });
+
+  //Tarkista login
+  app.post('/tarkista-login', async (req, res) => {
+    const { clientUsername } = req.body;
+    const token = req.headers.authorization?.split(' ')[0];
+    if (!clientUsername || !token){
+      return res.status(202).json({ message: "Ei kirjattu sisään "});
+    }
+    try {
+      const avoinToken = jwt.verify(token, process.env.JWT_SECRET);
+      const username = avoinToken.username;
+
+      if (username){
+        console.log(username, "on kirjautunut");
+        return res.status(200).json({ message: "Kirjautunut sisään" });
+      } else {
+        console.log(clientUsername, "ei ole kirjautunut");
+        return res.status(201).json({ message: "Ei kirjattu sisään "});
+      }
+    } catch (error) {
+      console.log("vanhentunut tai ei kirjattu");
+      return res.status(201).json({ message: "vanhentunut tai ei kirjattu" });
+
     }
   });
   

@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import './Arvostelu.css';
 import Api from './ApiHaku';
 import axios from 'axios';
 
 const Arvostelulomake = () => {
   const { imdbID } = useParams();
+  const [Kayttaja , setKayttaja] = useState(localStorage.getItem('username'));
   const [lomakeData, setLomakeData] = useState({
-    käyttäjänimi: '',
+    asiakas: Kayttaja,
     arvosana: '',
     imdbID: imdbID,
     arvostelu: ''
   });
   const [elokuvanTiedot, setElokuvanTiedot] = useState(null); 
+  const [kirjausTiedot, setKirjausTiedot] = useState(true);
 
   useEffect(() => {
     async function haeElokuvanTiedot() {
@@ -23,6 +25,21 @@ const Arvostelulomake = () => {
         console.error('Virhe elokuvatietoja haettaessa:', error);
       }
     }
+
+    async function TarkistaKirjaus() {
+      try {
+        const kirjausTiedot = await Api.TarkistaToken();
+        setKayttaja(localStorage.getItem('username'));
+        if (!kirjausTiedot){
+          console.log("ei kirjattu");
+          setKirjausTiedot(false);
+        }
+      } catch (error) {
+        console.error('Kirjaus ongelma', error);
+      }
+    }
+
+    TarkistaKirjaus();
     haeElokuvanTiedot();
   }, [imdbID]);
 
@@ -49,8 +66,9 @@ const Arvostelulomake = () => {
       }
 
       alert('Arvostelu lähetetty onnistuneesti!');
+      console.log(lomakeData);
       setLomakeData({
-        //käyttäjänimi: '',
+        asiakas: Kayttaja,
         arvosana: '',
         imdbID: imdbID,
         arvostelu: ''
@@ -61,9 +79,15 @@ const Arvostelulomake = () => {
     }
   };
 
+  if (!kirjausTiedot) {
+    return <Navigate to="/loginpage" />;
+  }
+
   return (
     <div className="Arvostelulomake">
-      <h1>Lähetä arvostelu</h1>
+      {elokuvanTiedot && (
+        <h1>Arvostele elokuva {elokuvanTiedot.Title}!</h1>
+      )}
       {elokuvanTiedot && (
         <div className='elokuvan-tiedot'>
           <h2>Elokuvan tiedot</h2>
@@ -73,9 +97,7 @@ const Arvostelulomake = () => {
         </div>
       )}
       <form onSubmit={lähetäLomake}>
-        <label htmlFor="käyttäjänimi">Käyttäjänimi:</label>
-        <input type="text" id="käyttäjänimi" name="käyttäjänimi" value={lomakeData.käyttäjänimi} onChange={muutaTietoja} required /><br /><br />
-
+        <br />
         <label htmlFor="arvosana">Arvosana:</label>
         <select id="arvosana" name="arvosana" value={lomakeData.arvosana} onChange={muutaTietoja} required>
           <option value="">Arvosana</option>
