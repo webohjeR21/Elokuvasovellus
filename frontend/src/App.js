@@ -12,6 +12,8 @@ import Search from './pages/Search'
 import Login from './pages/Login'
 import Delete from './pages/Delete'
 import Authed from './pages/Authed'
+import UserPasswordReset from './pages/UserPasswordReset'
+import Welcome from './pages/Welcome'
 import Arvostelu from './pages/Arvostelu'
 
 function App() {
@@ -29,6 +31,8 @@ function App() {
         <Route path='/LoginPage' element={<Login />} />
         <Route path='/Delete' element={<Delete />} />
         <Route path='/Authed' element={<Authed />} />
+        <Route path='/Pw-reset' element={<UserPasswordReset />} />
+        <Route path='/Welcome' element={<Welcome/>}/>
         <Route path='/Arvostelu/:imdbID' element={<Arvostelu />} />
 
          </Routes>
