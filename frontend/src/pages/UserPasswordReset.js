@@ -3,16 +3,12 @@ import Axios from 'axios';
 
 export default function UserPasswordReset() {
   const [newPassword, setNewPassword] = useState('');
-  const [realUsername, setUsername] = useState(' ');
   const [BearerToken, setToken] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const name = localStorage.getItem('username');
     if (token) {
       setToken(token);
-      setUsername(name);
-      console.log("username tuli:", name);
       console.log("Tokeni tuli:", token);
     }
   }, []);
@@ -22,7 +18,6 @@ export default function UserPasswordReset() {
       'http://localhost:3001/password-change',
       {
         newPassword: newPassword,
-        realUsername: realUsername,
       },
       {
         headers: {
@@ -31,7 +26,11 @@ export default function UserPasswordReset() {
       }
     )
       .then((response) => {
-        console.log("Meni läpi", response.data);
+        if (response.status === 200){
+          alert("vaihto onnistui");
+        } else {
+          alert("vaihto epäonnistui");
+        }
       })
       .catch((error) => {
         console.error('Error changing password:', error.response.data.error);
@@ -47,7 +46,8 @@ export default function UserPasswordReset() {
         value={newPassword}
         onChange={(e) => setNewPassword(e.target.value)}
       />
-      <button onClick={handleChangePassword}>Hyväksy</button>
+      <button onClick={() => {handleChangePassword(); setNewPassword('');}}>Hyväksy</button>
+
     </div>
   );
 }

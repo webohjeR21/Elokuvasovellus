@@ -178,8 +178,7 @@ app.post('/login', async (req, res) => {
     if (hashMatch) {
       console.log("Token generated for username:", username);
       console.log("Salasanat täsmää");
-      const id = result.rows[0].id
-      const token = jwt.sign({id}, process.env.JWT_SECRET, {
+      const token = jwt.sign({username: username}, process.env.JWT_SECRET, {
         expiresIn: 300, 
       })
       req.session.asiakkaat = result
@@ -202,15 +201,15 @@ app.post('/login', async (req, res) => {
 
   //Salasana vaihto
   app.post('/password-change', async (req, res) => {
-    const { newPassword, realUsername } = req.body;
+    const { newPassword } = req.body;
     const token = req.headers.authorization?.split(' ')[0];
 
     try {
-      const username = jwt.verify(token, process.env.JWT_SECRET).username;
-      console.log(realUsername);
+      const avoinToken = jwt.verify(token, process.env.JWT_SECRET);
+      const username = avoinToken.username;
       const newHash = await bcrypt.hash(newPassword, saltRounds);
-      await client.query("UPDATE asiakkaat SET passwd = $1 WHERE uname = $2", [newHash, realUsername]);
-  
+      await client.query("UPDATE asiakkaat SET passwd = $1 WHERE uname = $2", [newHash, username]);
+      console.log(username, "uusi salasana:", newPassword);
       return res.status(200).json({ message: "Salasann päivittäminen onnistui" });
     } catch (error) {
       console.error('Error changing password:', error);
@@ -223,11 +222,10 @@ app.post('/login', async (req, res) => {
     const { uname, arvosana, arvostelu, imdbID } = req.body;
     try {
       const vastaus = await client.query("INSERT INTO arvostelut(create_time, asiakas, arvosana, imdbid, arvostelu) VALUES (CURRENT_TIMESTAMP, $1, $2, $3, $4);", [uname, arvosana, imdbID, arvostelu]);
-      // Handle successful insertion
       res.status(200).json({ success: true, message: 'Data inserted successfully' });
     } catch (error) {
       console.error('Error inserting data:', error.message);
-      res.status(500).json({ success: false, error: error.message }); // Respond with an error status and message
+      res.status(500).json({ success: false, error: error.message }); 
     }
   });
   
