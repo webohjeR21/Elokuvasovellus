@@ -14,8 +14,7 @@ import Delete from './pages/Delete'
 import Authed from './pages/Authed'
 import UserPasswordReset from './pages/UserPasswordReset'
 import Welcome from './pages/Welcome'
-
-
+import Arvostelu from './pages/Arvostelu'
 
 function App() {
   return (
@@ -34,7 +33,7 @@ function App() {
         <Route path='/Authed' element={<Authed />} />
         <Route path='/Pw-reset' element={<UserPasswordReset />} />
         <Route path='/Welcome' element={<Welcome/>}/>
-   
+        <Route path='/Arvostelu/:imdbID' element={<Arvostelu />} />
 
          </Routes>
     </div>
