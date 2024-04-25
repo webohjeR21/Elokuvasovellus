@@ -81,7 +81,7 @@ BEGIN
         RAISE EXCEPTION 'Sähköposti on jo käytössä.';
     ELSE
         INSERT INTO asiakkaat (uname, create_time, passwd, email)
-        VALUES (p_uname, CURRENT_TIMESTAMP, digest(p_passwd, 'sha256'), p_email);
+        VALUES (p_uname, CURRENT_TIMESTAMP, p_passwd, p_email);
     END IF;
 END;
 $$;
@@ -196,6 +196,37 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: arvostelut; Type: TABLE; Schema: public; Owner: leffa_user
+--
+
+CREATE TABLE public.arvostelut (
+    id integer NOT NULL,
+    create_time date,
+    asiakas character varying(15),
+    arvosana integer,
+    imdbid character varying(15),
+    arvostelu text,
+    CONSTRAINT arvostelut_arvosana_check CHECK (((arvosana >= 1) AND (arvosana <= 5)))
+);
+
+
+ALTER TABLE public.arvostelut OWNER TO leffa_user;
+
+--
+-- Name: arvostelut_id_seq; Type: SEQUENCE; Schema: public; Owner: leffa_user
+--
+
+ALTER TABLE public.arvostelut ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.arvostelut_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: asiakkaat; Type: TABLE; Schema: public; Owner: leffa_user
 --
 
@@ -225,28 +256,11 @@ CREATE TABLE public.ryhmat (
 ALTER TABLE public.ryhmat OWNER TO leffa_user;
 
 --
--- Data for Name: asiakkaat; Type: TABLE DATA; Schema: public; Owner: leffa_user
+-- Name: arvostelut arvostelut_pkey; Type: CONSTRAINT; Schema: public; Owner: leffa_user
 --
 
-COPY public.asiakkaat (uname, create_time, passwd, email) FROM stdin;
-Janne42	2024-03-21	\\x8567f9cd1ed2fea5f85eadd21f7f137f683767660bb67827db2e882dca5d5471	jannemoney@paskakasa.fi
-Liisamaikkula	2024-03-21	\\x578e857a04d62edd82a792c8773f36c4aea65d0c86a6e852b9c7f4c0249410d6	liisaboss@paskakasa.fi
-tarmosami	2024-03-21	\\x578e857a04d62edd82a792c8773f36c4aea65d0c86a6e852b9c7f4c0249410d6	tarmosami@paskakasa.fi
-IsoKALERVO	2024-03-21	\\x294cfb471a24649bb8691f83d32838830ed5a43e3da010552a235550ea850645	kalervo@paskakasa.fi
-SAMULI	2024-03-22	\\x294cfb471a24649bb8691f83d32838830ed5a43e3da010552a235550ea850645	SAMULI@paskakasa.fi
-\.
-
-
---
--- Data for Name: ryhmat; Type: TABLE DATA; Schema: public; Owner: leffa_user
---
-
-COPY public.ryhmat (rnimi, omistaja, jasenet, create_time, kuvaus) FROM stdin;
-Supopeatsamit	Janne42	{Liisamaikkula,tarmosami,IsoKALERVO}	2024-03-21	\N
-Kovikset	Janne42	{Liisamaikkula,tarmosami,IsoKALERVO}	2024-03-21	Hiton kovia jatkia vain
-Leffapojat	Liisamaikkula	{tarmosami,IsoKALERVO}	2024-03-21	Pojat tykkaa leffoista
-Samulinjamit	SAMULI	{tarmosami,IsoKALERVO}	2024-03-22	Samulin leffakerho
-\.
+ALTER TABLE ONLY public.arvostelut
+    ADD CONSTRAINT arvostelut_pkey PRIMARY KEY (id);
 
 
 --
