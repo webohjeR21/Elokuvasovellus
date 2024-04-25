@@ -13,6 +13,7 @@ const session = require('express-session');
 const jwt = require('jsonwebtoken');
 const { Client } = require('pg');
 const bcrypt = require('bcrypt');
+const { use } = require('chai');
 const saltRounds = 10;
 const apiAvain = process.env.API_KEY;
 var apiIndex = 0;
@@ -144,7 +145,7 @@ app.listen(PORT, async function () {
 
 
 app.use(session({
-  secret: 'jwtSecret', // Specify a secret string to sign the session ID cookie
+  secret: process.env.JWT_SECRET,
   resave: false,
   saveUninitialized: true
 }));
@@ -178,7 +179,7 @@ app.post('/login', async (req, res) => {
       console.log("Token generated for username:", username);
       console.log("Salasanat täsmää");
       const id = result.rows[0].id
-      const token = jwt.sign({id}, "jwtSecret", {
+      const token = jwt.sign({id}, process.env.JWT_SECRET, {
         expiresIn: 300, 
       })
       req.session.asiakkaat = result
@@ -201,14 +202,14 @@ app.post('/login', async (req, res) => {
 
   //Salasana vaihto
   app.post('/password-change', async (req, res) => {
-    const { newPassword } = req.body;
-    const token = req.headers.authorization?.split(' ')[1];
+    const { newPassword, realUsername } = req.body;
+    const token = req.headers.authorization?.split(' ')[0];
 
     try {
-     
       const username = jwt.verify(token, process.env.JWT_SECRET).username;
+      console.log(realUsername);
       const newHash = await bcrypt.hash(newPassword, saltRounds);
-      await client.query("UPDATE asiakkaat SET passwd = $1 WHERE uname = $2", [newHash, username]);
+      await client.query("UPDATE asiakkaat SET passwd = $1 WHERE uname = $2", [newHash, realUsername]);
   
       return res.status(200).json({ message: "Salasann päivittäminen onnistui" });
     } catch (error) {
@@ -220,7 +221,6 @@ app.post('/login', async (req, res) => {
   //IMDB ARVOSTELU
   app.post('/imdbsubmit', async (req, res) => {
     const { uname, arvosana, arvostelu, imdbID } = req.body;
-    console.log(req.body); // Log the request body to check if it contains the expected data
     try {
       const vastaus = await client.query("INSERT INTO arvostelut(create_time, asiakas, arvosana, imdbid, arvostelu) VALUES (CURRENT_TIMESTAMP, $1, $2, $3, $4);", [uname, arvosana, imdbID, arvostelu]);
       // Handle successful insertion

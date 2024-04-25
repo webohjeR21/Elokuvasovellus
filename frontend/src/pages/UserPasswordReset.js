@@ -3,13 +3,17 @@ import Axios from 'axios';
 
 export default function UserPasswordReset() {
   const [newPassword, setNewPassword] = useState('');
+  const [realUsername, setUsername] = useState(' ');
   const [BearerToken, setToken] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    console.log = ("Tokeni tuli:", token)
+    const name = localStorage.getItem('username');
     if (token) {
       setToken(token);
+      setUsername(name);
+      console.log("username tuli:", name);
+      console.log("Tokeni tuli:", token);
     }
   }, []);
 
@@ -18,6 +22,7 @@ export default function UserPasswordReset() {
       'http://localhost:3001/password-change',
       {
         newPassword: newPassword,
+        realUsername: realUsername,
       },
       {
         headers: {
