@@ -1,7 +1,6 @@
 header{
-    
     background-color: #060b26;
-    height: 1px;
+    height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,6 +9,5 @@ header{
 
 
 header h1 {
-    margin-top: 70px;
    color: white;
 }
