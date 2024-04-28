@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
+import { Navigate, useNavigate } from 'react-router-dom';
+import './UserPassWordReset.css'
 
 export default function UserPasswordReset() {
   const [newPassword, setNewPassword] = useState('');
   const [BearerToken, setToken] = useState('');
+  const navigate = useNavigate();
+ 
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -37,6 +41,11 @@ export default function UserPasswordReset() {
       });
   };
 
+
+  const navigateToWelcome = () => {
+    navigate("/Welcome")
+  }
+
   return (
     <div className='passwordReset'>
       <h2>Vaihda salasana</h2>
@@ -47,6 +56,7 @@ export default function UserPasswordReset() {
         onChange={(e) => setNewPassword(e.target.value)}
       />
       <button onClick={() => {handleChangePassword(); setNewPassword('');}}>Hyväksy</button>
+      <button onClick={navigateToWelcome}>Palaa takaisin</button>
 
     </div>
   );
