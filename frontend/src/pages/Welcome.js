@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import './Create.css';
 import { useNavigate } from 'react-router-dom';
+import './Welcome.css'
 
 export default function Welcome(){
 
