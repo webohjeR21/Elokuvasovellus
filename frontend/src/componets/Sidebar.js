@@ -14,7 +14,7 @@ export const Sidebar = [
     {
         title: 'Näytösajat',
         path: '/showtime',
-        icon: <IoIcons.IoIosPaper />,
+        icon: <IoIcons.IoIosPaper  />,
         cNameT: 'nav-text'
     },
     {
@@ -40,6 +40,17 @@ export const Sidebar = [
         path: '/create',
         icon: <FiIcons.FiUserPlus />,
         cNameT: 'nav-text'
+    },
+
+    {
+        title: 'Käyttäjäasetukset',
+        path: '/Welcome',
+        icon: <IoIcons.IoIosSettings />,
+        cNameT: 'nav-text'
     }
 
+
+
+
 ]
+

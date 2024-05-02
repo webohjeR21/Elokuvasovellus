@@ -1,33 +1,36 @@
-import React, { useState } from 'react'
+import React, {  useState, } from 'react'
 import Axios from 'axios'
 import './Create.css'
 import { useNavigate } from 'react-router-dom'
+import Footer from '../componets/Footer'
 
 
 export default function Login() {
 
+  const [token, setToken] = useState()
   const [usernameReg, setUsernameReg] = useState('')
   const [passwordReg, setPasswordReg] = useState('')
-
+  
   const navigate = useNavigate()
  
   const log = () => {
-   
     Axios.post('http://localhost:3001/login', {
       username: usernameReg,
       password: passwordReg,
-    }).then((response) => {
-      console.log(response)
-      if (response.status == 200){
-        navigate('/Authed');
+    })
+    .then((response) => {
+      console.log(response);
+      if (response.status === 200) {
+       
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('username', response.data.user.username)
+        navigate('/Welcome');
       }
-    
     })
     .catch((error) => {
-      console.error("Virhe kirjautumisessa:", error)
-      
-    })
-  }
+      console.error('Virhe kirjautumisessa:', error);
+    });
+  };
 
 
   return (
