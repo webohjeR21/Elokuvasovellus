@@ -11,7 +11,6 @@ app.use(express.json());
 const session = require('express-session');
 //app.use('/auth')
 //POSTGRES CLIENT
-const jwt = require('jsonwebtoken');
 const { Client } = require('pg');
 const bcrypt = require('bcrypt');
 const { use } = require('chai');
@@ -49,7 +48,7 @@ const PORT = 3001;
 app.post('/register', async (req, res) => {
 
   const { username, password, email } = req.body;
-  // Logging received data
+  
   console.log("Received username:", username);
   console.log("Received password:", password);
   console.log("Received email:", email);
@@ -81,21 +80,12 @@ app.post('/register', async (req, res) => {
   app.delete('/asiakkaat/:uname', async (req, res) => {
     const userUname = req.params.uname;
     try {
-
-      
-
-    
-
       const result = await client.query('SELECT * FROM asiakkaat WHERE uname = $1', [userUname]);
       if (result.rows.length === 0) {
         
         console.log('Käyttäjää ei löytynyt: ', userUname);
         return res.status(404).json({ error: 'Käyttäjää ei löydy.' }); 
       }
-  
-
-
-      
 
       await client.query('DELETE FROM asiakkaat WHERE uname = $1', [userUname]);
       console.log('Käyttäjä poistettu: ', userUname);
@@ -151,9 +141,6 @@ app.listen(PORT, async function () {
   console.log('kuuntelee porttia ' + PORT);
 })
 
-
-
-
 app.use(session({
   secret: process.env.JWT_SECRET,
   resave: false,
@@ -161,20 +148,23 @@ app.use(session({
 }));
 
 
-
 //LOGIN
-
 app.post('/login', async (req, res) => {
+
   const { username, password } = req.body;
+  console.log("Login yritys", username);
 
   if (!username) {
-    return res.status(400).json({ error: "Username cannot be null or empty" });
+    return res.status(400).json({error: "Username cannot be null or empty"})
   }
 
   try {
+    
+    //kokeile onko salasana ja käyttäjänimi oikein
     const result = await client.query("SELECT passwd FROM asiakkaat WHERE uname = $1", [username]);
 
-    if (result.rows.length < 1) {
+    if (result.rows.length < 1){
+      console.log('Käyttäjää ei ole olemassa');
       return res.status(401).json({ error: "Käyttäjänimeä ei löydy" });
     }
 
@@ -182,11 +172,6 @@ app.post('/login', async (req, res) => {
     const hashMatch = await bcrypt.compare(password, hashPwd);
 
     if (hashMatch) {
-
-      const token = jwt.sign({ username: username }, process.env.JWT_SECRET); // JWT-tokenin luonti
-      return res.status(200).json({ token: token });
-    } else {
-
       console.log("Token generated for username:", username);
       console.log("Salasanat täsmää");
       const token = jwt.sign({username: username}, process.env.JWT_SECRET, {
@@ -198,16 +183,14 @@ app.post('/login', async (req, res) => {
     } 
 
     else {
-
       console.log('Salasanat ei täsmää');
       return res.status(401).json({ error: "Salasana väärin" });
     }
+
   } catch (erro) {
-    console.error('Error: ', erro);
+    console.error('Eroor: ', erro);
     return res.status(500).json({ error: "Palvelin error" });
   }
-
-
   
   })
 
