@@ -49,7 +49,7 @@ const Delete = () => {
           });
           setUsername('');
         } else if (response.status === 404) {
-          // Handle case where user does not exist
+
           Swal.fire({
             icon: 'error',
             title: 'Virhe',

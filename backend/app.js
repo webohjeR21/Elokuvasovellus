@@ -2,6 +2,7 @@ const { fetchData } = require('./postgre');
 const express = require('express');
 const axios = require('axios');
 const app = express();
+const jwt = require('jsonwebtoken');
 app.use(express.static('public'));
 require('dotenv').config();
 const cors = require('cors');
@@ -80,15 +81,22 @@ app.post('/register', async (req, res) => {
   app.delete('/asiakkaat/:uname', async (req, res) => {
     const userUname = req.params.uname;
     try {
+
+      
+
     
+
       const result = await client.query('SELECT * FROM asiakkaat WHERE uname = $1', [userUname]);
       if (result.rows.length === 0) {
         
         console.log('Käyttäjää ei löytynyt: ', userUname);
-        return res.status(404).json({ error: 'Käyttäjää ei löydy.' });
+        return res.status(404).json({ error: 'Käyttäjää ei löydy.' }); 
       }
   
+
+
       
+
       await client.query('DELETE FROM asiakkaat WHERE uname = $1', [userUname]);
       console.log('Käyttäjä poistettu: ', userUname);
       res.status(200).json({ message: 'Käyttäjä poistettu.' });
@@ -144,6 +152,8 @@ app.listen(PORT, async function () {
 })
 
 
+
+
 app.use(session({
   secret: process.env.JWT_SECRET,
   resave: false,
@@ -153,22 +163,18 @@ app.use(session({
 
 
 //LOGIN
-app.post('/login', async (req, res) => {
 
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  console.log("Login yritys", username);
 
   if (!username) {
-    return res.status(400).json({error: "Username cannot be null or empty"})
+    return res.status(400).json({ error: "Username cannot be null or empty" });
   }
 
   try {
-    
-    //kokeile onko salasana ja käyttäjänimi oikein
     const result = await client.query("SELECT passwd FROM asiakkaat WHERE uname = $1", [username]);
 
-    if (result.rows.length < 1){
-      console.log('Käyttäjää ei ole olemassa');
+    if (result.rows.length < 1) {
       return res.status(401).json({ error: "Käyttäjänimeä ei löydy" });
     }
 
@@ -176,6 +182,11 @@ app.post('/login', async (req, res) => {
     const hashMatch = await bcrypt.compare(password, hashPwd);
 
     if (hashMatch) {
+
+      const token = jwt.sign({ username: username }, process.env.JWT_SECRET); // JWT-tokenin luonti
+      return res.status(200).json({ token: token });
+    } else {
+
       console.log("Token generated for username:", username);
       console.log("Salasanat täsmää");
       const token = jwt.sign({username: username}, process.env.JWT_SECRET, {
@@ -187,14 +198,16 @@ app.post('/login', async (req, res) => {
     } 
 
     else {
+
       console.log('Salasanat ei täsmää');
       return res.status(401).json({ error: "Salasana väärin" });
     }
-
   } catch (erro) {
-    console.error('Eroor: ', erro);
+    console.error('Error: ', erro);
     return res.status(500).json({ error: "Palvelin error" });
   }
+
+
   
   })
 
@@ -255,3 +268,4 @@ app.post('/login', async (req, res) => {
     }
   });
   
+
